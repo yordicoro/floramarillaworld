@@ -177,7 +177,7 @@
   <div class="card" id="panelQR" hidden>
     <h2>Código QR</h2>
     <div id="qrwrap"><div id="qrbox"></div></div>
-    <p id="qrtxt">Escanéame 🌼</p>
+    <p id="qrtxt">Escanéame</p>
     <label for="inUrl">Enlace del QR</label>
     <input id="inUrl" inputmode="url" autocapitalize="off" spellcheck="false">
     <p class="ayuda">Si compartes esta página con un enlace, pégalo aquí y toca «Actualizar QR». Luego captura la pantalla o imprímelo.</p>
