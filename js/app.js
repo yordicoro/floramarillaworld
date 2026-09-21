@@ -6,7 +6,7 @@
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------- Texto personalizable ---------- */
-  var DEFAULT_MSG = 'Sorry I can’t be there, but I’m sending you a flower from afar.';
+  var DEFAULT_MSG = 'Desarrollado por Yordic.';
   var qs = new URLSearchParams(location.search);
   var state = {
     para: (qs.get('para') || '').slice(0, 40),
@@ -91,16 +91,72 @@
     }
     return c;
   }
+  // Yellow lily: six pointed tepals, golden throat and visible stamens.
+  function makeLily(S) {
+    var c = document.createElement('canvas'); c.width = c.height = S;
+    var g = c.getContext('2d'); g.translate(S / 2, S / 2);
+    var R = S * 0.34;
+    var halo = g.createRadialGradient(0, 0, 0, 0, 0, S * 0.49);
+    halo.addColorStop(0, 'rgba(255,204,55,0.25)'); halo.addColorStop(1, 'rgba(255,204,55,0)');
+    g.fillStyle = halo; g.fillRect(-S/2, -S/2, S, S);
+    for (var layer = 0; layer < 2; layer++) {
+      for (var i = 0; i < 3; i++) {
+        g.save(); g.rotate(i * TAU / 3 + layer * Math.PI / 3 - Math.PI / 2);
+        var length = R * (layer ? 0.96 : 1.08);
+        var grad = g.createLinearGradient(0, 0, length, 0);
+        grad.addColorStop(0, '#b68108'); grad.addColorStop(0.22, '#efb900');
+        grad.addColorStop(0.6, '#ffe142'); grad.addColorStop(1, '#fff4a0');
+        g.fillStyle = grad; g.beginPath(); g.moveTo(-R*0.08,0);
+        g.bezierCurveTo(R*0.28,-R*0.38,R*0.78,-R*0.38,length,-R*0.12);
+        g.bezierCurveTo(R*0.73,R*0.02,R*0.63,R*0.4,R*0.22,R*0.2);
+        g.quadraticCurveTo(0,R*0.08,-R*0.08,0); g.fill();
+        g.strokeStyle = 'rgba(170,103,0,0.38)'; g.lineWidth = Math.max(0.8,S*0.0025);
+        g.beginPath(); g.moveTo(0,0); g.quadraticCurveTo(R*0.55,-R*0.05,length,-R*0.12); g.stroke();
+        g.strokeStyle = 'rgba(255,250,181,0.55)';
+        g.beginPath(); g.moveTo(R*0.12,R*0.04); g.quadraticCurveTo(R*0.55,R*0.17,R*0.83,-R*0.035); g.stroke();
+        for(var dot=0;dot<8;dot++) {
+          g.fillStyle='rgba(145,80,0,0.4)'; g.beginPath();
+          g.ellipse(R*(0.18+(dot%4)*0.065), R*(dot<4?-0.07:0.085),R*0.009,R*0.016,0,0,TAU);g.fill();
+        }
+        g.restore();
+      }
+    }
+    for(var st=0;st<6;st++) {
+      var a=st*TAU/6, x=Math.cos(a)*R*0.24, y=Math.sin(a)*R*0.24;
+      g.strokeStyle='#ffed94';g.lineWidth=S*0.005;g.beginPath();g.moveTo(0,0);g.quadraticCurveTo(x*0.35,y*0.35-R*0.07,x,y);g.stroke();
+      g.fillStyle='#985019';g.beginPath();g.ellipse(x,y,R*0.025,R*0.065,a+0.6,0,TAU);g.fill();
+    }
+    g.fillStyle='#c4ca50';g.beginPath();g.arc(0,0,R*0.035,0,TAU);g.fill();
+    return c;
+  }
+
+  // Cup-shaped tulip with overlapping petals and a short stem.
+  function makeTulip(S, light) {
+    var c=document.createElement('canvas');c.width=c.height=S;
+    var g=c.getContext('2d');g.translate(S/2,S/2);g.scale(S/200,S/200);
+    g.strokeStyle='#72963a';g.lineWidth=4;g.lineCap='round';
+    g.beginPath();g.moveTo(0,20);g.quadraticCurveTo(5,43,-3,66);g.stroke();
+    g.fillStyle='#73983b';g.beginPath();g.moveTo(0,53);g.quadraticCurveTo(-31,45,-34,19);g.quadraticCurveTo(-5,28,0,53);g.fill();
+    g.fillStyle='#97ac40';g.beginPath();g.moveTo(2,46);g.quadraticCurveTo(29,26,27,7);g.quadraticCurveTo(3,23,2,46);g.fill();
+    var back=g.createLinearGradient(0,-62,0,24);back.addColorStop(0,'#ffe876');back.addColorStop(1,'#d29100');
+    g.fillStyle=back;g.beginPath();g.moveTo(-37,-43);g.quadraticCurveTo(-17,-36,-12,-62);g.quadraticCurveTo(4,-47,15,-61);g.quadraticCurveTo(19,-37,39,-43);g.bezierCurveTo(40,9,18,27,0,28);g.bezierCurveTo(-25,25,-38,4,-37,-43);g.fill();
+    var petal=g.createLinearGradient(-36,0,34,0);petal.addColorStop(0,'#e5a500');petal.addColorStop(.45,light?'#fff184':'#ffdb32');petal.addColorStop(1,'#efb100');
+    g.fillStyle=petal;g.beginPath();g.moveTo(-38,-45);g.bezierCurveTo(-16,-39,13,-13,13,22);g.bezierCurveTo(-11,42,-43,10,-38,-45);g.fill();
+    g.beginPath();g.moveTo(38,-47);g.bezierCurveTo(10,-38,-10,-7,-10,24);g.bezierCurveTo(17,36,42,2,38,-47);g.fill();
+    var front=g.createLinearGradient(-13,-40,18,20);front.addColorStop(0,'#fff394');front.addColorStop(.55,'#ffda30');front.addColorStop(1,'#df9d00');
+    g.fillStyle=front;g.beginPath();g.moveTo(0,-48);g.bezierCurveTo(-27,-18,-25,12,0,29);g.bezierCurveTo(26,13,22,-22,0,-48);g.fill();
+    g.strokeStyle='rgba(255,250,176,.65)';g.lineWidth=1.3;g.beginPath();g.moveTo(0,-40);g.quadraticCurveTo(-10,-10,0,23);g.stroke();
+    return c;
+  }
   var SPR = [
-    makeSprite({ size: 200, n: 10, layers: 2, w: 0.30, cr: 0.34, seeds: 40, cols: [['#f2a900', '#ffd21f'], ['#ffd21f', '#fff08a']] }),
-    makeSprite({ size: 200, n: 14, layers: 2, w: 0.24, cr: 0.42, seeds: 60, cols: [['#e59a00', '#ffc300'], ['#ffc300', '#ffe14d']] }),
-    makeSprite({ size: 200, n: 8,  layers: 2, w: 0.42, cr: 0.30, seeds: 30, cols: [['#ffb700', '#ffe14d'], ['#ffe14d', '#fff6b0']] }),
-    makeSprite({ size: 200, n: 12, layers: 1, w: 0.26, cr: 0.32, seeds: 30, cols: [['#ffd84d', '#fff3a3']] }),
-    makeSprite({ size: 200, n: 16, layers: 2, w: 0.20, cr: 0.36, seeds: 50, cols: [['#f29100', '#ffb700'], ['#ffb700', '#ffdf4d']] }),
-    makeSprite({ size: 200, n: 6,  layers: 2, w: 0.46, cr: 0.28, seeds: 20, cols: [['#ffc800', '#ffe866'], ['#ffe866', '#fffbd0']] })
+    makeTulip(240, false),
+    makeTulip(240, true),
+    makeLily(240),
+    makeSprite({ size: 200, n: 12, layers: 1, w: 0.26, cr: 0.19, seeds: 20, cols: [['#ffd84d', '#fff3a3']] }),
+    makeSprite({ size: 200, n: 18, layers: 3, w: 0.25, cr: 0.14, seeds: 12, cols: [['#e6a000', '#ffd126'], ['#ffd126', '#fff08a']] }),
+    makeSprite({ size: 200, n: 5, layers: 1, w: 0.62, cr: 0.13, seeds: 10, cols: [['#ffc800', '#ffe866']] })
   ];
-  var SUN = makeSprite({ size: 640, n: 22, layers: 3, w: 0.22, cr: 0.36, seeds: 320,
-    cols: [['#e08a00', '#ffb800'], ['#ffb800', '#ffd83a'], ['#ffd83a', '#fff09a']] });
+  var SUN = makeLily(640);
 
   function sprite(spr, x, y, reach, rot, alpha) {
     var size = reach * 3.08;
@@ -161,8 +217,13 @@
     belt.push({ r: rand(0.375, 0.445), a: rand(0, TAU), y: rand(-0.012, 0.012), tw: rand(0, TAU), sz: rand(0.6, 1.8) });
   }
   var stars = [];
-  for (i = 0; i < 230; i++) {
-    stars.push({ x: Math.random(), y: Math.random(), r: rand(0.4, 1.4), tw: rand(0, TAU), sp: rand(0.6, 2.2), par: rand(0.005, 0.03), petal: Math.random() < 0.09 });
+  var starCount = Math.round(Math.max(240, Math.min(650, W * H / 2200)));
+  for (i = 0; i < starCount; i++) {
+    var bright = i % 24 === 0;
+    stars.push({ x: Math.random(), y: Math.random(),
+      r: bright ? rand(1.2, 1.9) : rand(0.35, 1.05),
+      tw: rand(0, TAU), sp: rand(0.35, 1.1), par: rand(0.003, 0.018),
+      bright: bright, color: ['#f6f3ff', '#cbdcff', '#ffe6ad'][i % 3] });
   }
   var falling = [];
   for (i = 0; i < 24; i++) {
@@ -223,19 +284,29 @@
     ctx.clearRect(0, 0, W, H);
     ctx.globalCompositeOperation = 'source-over';
 
-    // estrellas y mini-flores lejanas
+    // Distant stars, drawn behind the flowers with a gentle shimmer.
+    ctx.save();
     for (var s = 0; s < stars.length; s++) {
       var st = stars[s];
       var sx = ((st.x * W - yaw * st.par * W) % W + W) % W, sy = st.y * H;
-      var tw = 0.45 + 0.55 * Math.sin(T * st.sp + st.tw);
-      if (st.petal) {
-        sprite(SPR[3], sx, sy, 3.5 + st.r * 2.5, T * 0.3 + st.tw, tw * 0.7);
-      } else {
-        ctx.globalAlpha = tw * 0.85;
-        ctx.fillStyle = '#ffeeb0';
-        ctx.beginPath(); ctx.arc(sx, sy, st.r, 0, TAU); ctx.fill();
+      var tw = reduce ? 0.72 : 0.58 + 0.26 * Math.sin(T * st.sp + st.tw);
+      ctx.globalAlpha = tw;
+      ctx.fillStyle = st.color;
+      ctx.beginPath(); ctx.arc(sx, sy, st.r, 0, TAU); ctx.fill();
+      if (st.bright) {
+        var glow = ctx.createRadialGradient(sx, sy, 0, sx, sy, st.r * 5);
+        glow.addColorStop(0, 'rgba(210,225,255,0.32)');
+        glow.addColorStop(1, 'rgba(210,225,255,0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath(); ctx.arc(sx, sy, st.r * 5, 0, TAU); ctx.fill();
+        ctx.globalAlpha = tw * 0.5;
+        ctx.strokeStyle = st.color; ctx.lineWidth = 0.65;
+        var ray = st.r * 3;
+        ctx.beginPath(); ctx.moveTo(sx - ray, sy); ctx.lineTo(sx + ray, sy);
+        ctx.moveTo(sx, sy - ray); ctx.lineTo(sx, sy + ray); ctx.stroke();
       }
     }
+    ctx.restore();
 
     // estrellas fugaces doradas
     if (!reduce && Math.random() < dt * 0.25 && comets.length < 2) {
